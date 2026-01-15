@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import { Calendar, TrendingUp, MoreVertical, Trash2, Archive } from 'lucide-react';
+import { Calendar, TrendingUp, MoreVertical, Trash2, Archive, ImageOff } from 'lucide-react';
 import { useCurrency } from '../../contexts/CurrencyContext';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { ImageService } from '../../services/ImageService';
 
-export default function TripCard({ trip, onDelete, onArchive }) {
+export default function TripCard({ trip, onDelete, onArchive, index = 0 }) {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [imageError, setImageError] = useState(false);
     const { currency } = useCurrency();
     const { t } = useLanguage();
 
@@ -37,23 +39,44 @@ export default function TripCard({ trip, onDelete, onArchive }) {
     const isOverBudget = percentUsed > 100;
     const isWarning = percentUsed >= 80 && percentUsed <= 100;
 
+    // Get image URL - use trip's coverImage if set, otherwise generate from destination
+    const imageUrl = trip.coverImage || ImageService.getDestinationImageUrl(trip.destination || trip.name);
+    const fallbackGradient = ImageService.getGradientClass(index);
+
     return (
         <div className="relative">
             <button
                 onClick={toggleMenu}
-                className="absolute top-2 right-2 p-2 rounded-full bg-black/10 hover:bg-black/20 text-white transition-colors z-10"
+                className="absolute top-2 right-2 p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors z-10 backdrop-blur-sm"
             >
                 <MoreVertical size={20} />
             </button>
 
             <Link to={`/trips/${trip.id}`} className="block">
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow relative">
-                    {/* Header bg */}
-                    <div className={`h-24 bg-gradient-to-r ${trip.isActive !== false ? 'from-indigo-500 to-violet-600' : 'from-gray-400 to-gray-500'} relative`}>
-                        <div className="absolute bottom-3 left-4 text-white pr-10">
-                            <h3 className="text-lg font-bold truncate">{trip.name}</h3>
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 relative group">
+                    {/* Header with Image */}
+                    <div className="h-32 relative overflow-hidden">
+                        {!imageError ? (
+                            <img
+                                src={imageUrl}
+                                alt={trip.destination || trip.name}
+                                className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${trip.isActive === false ? 'grayscale opacity-70' : ''}`}
+                                onError={() => setImageError(true)}
+                            />
+                        ) : (
+                            <div className={`w-full h-full bg-gradient-to-br ${fallbackGradient} flex items-center justify-center`}>
+                                <ImageOff className="text-white/30" size={32} />
+                            </div>
+                        )}
+
+                        {/* Gradient overlay for text readability */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                        {/* Title overlay */}
+                        <div className="absolute bottom-3 left-4 right-12 text-white">
+                            <h3 className="text-lg font-bold truncate drop-shadow-lg">{trip.name}</h3>
                             {trip.destination && (
-                                <p className="text-sm text-white/80 truncate">{trip.destination}</p>
+                                <p className="text-sm text-white/90 truncate drop-shadow">{trip.destination}</p>
                             )}
                         </div>
                     </div>

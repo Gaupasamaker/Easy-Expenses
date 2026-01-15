@@ -161,10 +161,11 @@ export default function TripList() {
                     </div>
                 ) : (
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        {filteredTrips.map((trip) => (
+                        {filteredTrips.map((trip, index) => (
                             <TripCard
                                 key={trip.id}
                                 trip={trip}
+                                index={index}
                                 onDelete={(tripId) => openDeleteModal(tripId, trip.name)}
                                 onArchive={handleArchiveTrip}
                             />
