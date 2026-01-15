@@ -18,15 +18,18 @@ export default function ScannerModal({ onClose, onScanComplete }) {
         await processImage(file);
     };
 
+    const [errorMsg, setErrorMsg] = useState(null);
+
     const processImage = async (file) => {
         try {
             setAnalyzing(true);
+            setErrorMsg(null);
             const data = await GeminiService.analyzeReceipt(file);
-            onScanComplete(data, file); // Pass extracted data and the file back
+            onScanComplete(data, file);
             onClose();
         } catch (error) {
             console.error("Scan failed", error);
-            alert("Could not analyze receipt. Please try again or enter manually.");
+            setErrorMsg(error.message || "Could not analyze receipt.");
             setAnalyzing(false);
         }
     };
@@ -77,6 +80,15 @@ export default function ScannerModal({ onClose, onScanComplete }) {
                             </div>
                             <h3 className="text-lg font-bold text-indigo-900 animate-pulse">Analyzing with AI...</h3>
                             <p className="text-gray-500 text-xs mt-2">Extracting merchant, date, and amount</p>
+                        </div>
+                    )}
+
+                    {errorMsg && (
+                        <div className="mt-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+                            {errorMsg}
+                            <button onClick={onClose} className="block w-full mt-2 text-red-700 font-bold underline">
+                                Close
+                            </button>
                         </div>
                     )}
                 </div>

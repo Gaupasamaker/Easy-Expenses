@@ -1,21 +1,22 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Access your API key as an environment variable (see "Set up your API key" above)
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-
-const genAI = new GoogleGenerativeAI(API_KEY);
-
 export const GeminiService = {
     analyzeReceipt: async (imageFile) => {
-        if (!API_KEY) {
-            throw new Error("Gemini API Key is missing. Please set VITE_GEMINI_API_KEY in .env");
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+        if (!apiKey) {
+            console.error("Debug: Key is missing at runtime.");
+            throw new Error("API Key missing. Please check .env and restart.");
         }
+
+        // Initialize at runtime to ensure key is loaded
+        const genAI = new GoogleGenerativeAI(apiKey);
+
+        // Trying gemini-2.0-flash-exp as 1.5-flash seems 404 for this key/version
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
 
         // Convert file to base64
         const base64Image = await fileToGenerativePart(imageFile);
-
-        // Use the flash model for speed and efficiency
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `
       Analyze this image of a receipt. Extract the following information in JSON format only:
