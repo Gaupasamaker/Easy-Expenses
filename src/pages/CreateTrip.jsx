@@ -1,0 +1,148 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { TripService } from '../services/TripService';
+import { useAuth } from '../contexts/AuthContext';
+import { Loader2, ArrowLeft, Calendar, DollarSign } from 'lucide-react';
+
+export default function CreateTrip() {
+    const navigate = useNavigate();
+    const { currentUser } = useAuth();
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        description: '',
+        startDate: '',
+        endDate: '',
+        budget: '',
+        isActive: true
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!currentUser) return;
+
+        try {
+            setLoading(true);
+
+            const tripData = {
+                ...formData,
+                startDate: formData.startDate ? new Date(formData.startDate) : null,
+                endDate: formData.endDate ? new Date(formData.endDate) : null,
+                budget: formData.budget ? parseFloat(formData.budget) : 0
+            };
+
+            await TripService.createTrip(tripData, currentUser.uid);
+            navigate('/trips');
+        } catch (error) {
+            console.error("Error creating trip:", error);
+            alert("Failed to create trip. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="max-w-2xl mx-auto">
+            <div className="flex items-center mb-6">
+                <button onClick={() => navigate(-1)} className="mr-4 p-2 rounded-full hover:bg-gray-100">
+                    <ArrowLeft size={24} className="text-gray-600" />
+                </button>
+                <h2 className="text-2xl font-bold text-gray-800">Create New Trip</h2>
+            </div>
+
+            <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Trip Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        placeholder="e.g., Summer Vacation 2024"
+                        value={formData.name}
+                        onChange={handleChange}
+                    />
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
+                    <textarea
+                        name="description"
+                        rows="3"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                        placeholder="Brief details about the trip..."
+                        value={formData.description}
+                        onChange={handleChange}
+                    />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                        <div className="relative">
+                            <Calendar className="absolute left-3 top-2.5 text-gray-400" size={20} />
+                            <input
+                                type="date"
+                                name="startDate"
+                                required
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                value={formData.startDate}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                        <div className="relative">
+                            <Calendar className="absolute left-3 top-2.5 text-gray-400" size={20} />
+                            <input
+                                type="date"
+                                name="endDate"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                                value={formData.endDate}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Total Budget</label>
+                    <div className="relative">
+                        <DollarSign className="absolute left-3 top-2.5 text-gray-400" size={20} />
+                        <input
+                            type="number"
+                            name="budget"
+                            min="0"
+                            step="0.01"
+                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                            placeholder="0.00"
+                            value={formData.budget}
+                            onChange={handleChange}
+                        />
+                    </div>
+                </div>
+
+                <div className="pt-4">
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 transition-colors flex justify-center items-center"
+                    >
+                        {loading ? <Loader2 className="animate-spin mr-2" /> : null}
+                        Create Trip
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
+}
