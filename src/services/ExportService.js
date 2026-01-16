@@ -55,6 +55,21 @@ export const ExportService = {
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
 
+        // Helper to safely convert Firestore Timestamp or Date to native Date
+        const toDate = (dateValue) => {
+            if (!dateValue) return null;
+            if (typeof dateValue.toDate === 'function') return dateValue.toDate(); // Firestore Timestamp
+            if (dateValue instanceof Date) return dateValue;
+            return new Date(dateValue); // Try parsing string
+        };
+
+        // Helper to safely format dates
+        const safeFormat = (dateValue, fmt) => {
+            const date = toDate(dateValue);
+            if (!date || isNaN(date.getTime())) return '-';
+            return format(date, fmt);
+        };
+
         // Colors matching the app theme
         const primaryColor = [249, 115, 22]; // Orange
         const secondaryColor = [236, 72, 153]; // Pink
@@ -83,8 +98,8 @@ export const ExportService = {
 
         // Date range on the right
         doc.setFontSize(10);
-        const startDate = trip.startDate ? format(trip.startDate, 'dd/MM/yyyy') : '-';
-        const endDate = trip.endDate ? format(trip.endDate, 'dd/MM/yyyy') : '-';
+        const startDate = safeFormat(trip.startDate, 'dd/MM/yyyy');
+        const endDate = safeFormat(trip.endDate, 'dd/MM/yyyy');
         doc.text(`${startDate} - ${endDate}`, pageWidth - 14, 32, { align: 'right' });
 
         // ========== SUMMARY BOX ==========
@@ -123,7 +138,7 @@ export const ExportService = {
 
         // Prepare table data
         const tableData = expenses.map(e => [
-            e.date ? format(e.date, 'dd/MM/yyyy') : '-',
+            safeFormat(e.date, 'dd/MM/yyyy'),
             e.merchant || '-',
             e.category || '-',
             e.description ? (e.description.length > 30 ? e.description.substring(0, 30) + '...' : e.description) : '-',
