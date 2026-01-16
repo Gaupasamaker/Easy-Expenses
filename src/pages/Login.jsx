@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { Loader2, Wallet, Moon, Sun } from 'lucide-react';
+import { Loader2, Plane, Moon, Sun } from 'lucide-react';
 
 export default function Login() {
     const { login } = useAuth();
@@ -28,7 +28,7 @@ export default function Login() {
     };
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-orange-400 via-pink-500 to-rose-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4">
             {/* Theme & Language Toggle */}
             <div className="absolute top-4 right-4 flex gap-2">
                 <button
@@ -42,7 +42,7 @@ export default function Login() {
                         <button
                             key={lang.code}
                             onClick={() => setLanguage(lang.code)}
-                            className={`px-3 py-2 text-sm font-medium transition-colors ${language === lang.code ? 'bg-white text-indigo-600' : 'text-white hover:bg-white/20'}`}
+                            className={`px-3 py-2 text-sm font-medium transition-colors ${language === lang.code ? 'bg-white text-orange-600' : 'text-white hover:bg-white/20'}`}
                         >
                             {lang.flag}
                         </button>
@@ -53,8 +53,8 @@ export default function Login() {
             <div className="w-full max-w-md space-y-8 rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl text-center">
                 {/* Logo */}
                 <div className="flex justify-center">
-                    <div className="bg-gradient-to-br from-indigo-500 to-violet-600 p-4 rounded-2xl shadow-lg">
-                        <Wallet className="text-white" size={40} />
+                    <div className="bg-gradient-to-br from-orange-500 to-pink-500 p-4 rounded-2xl shadow-lg">
+                        <Plane className="text-white" size={40} />
                     </div>
                 </div>
 
@@ -70,7 +70,7 @@ export default function Login() {
                 <button
                     onClick={handleLogin}
                     disabled={loading}
-                    className="group relative flex w-full justify-center items-center rounded-xl border border-transparent bg-indigo-600 px-4 py-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 transition-colors shadow-lg"
+                    className="group relative flex w-full justify-center items-center rounded-xl border border-transparent bg-gradient-to-r from-orange-500 to-pink-500 px-4 py-4 text-base font-medium text-white hover:from-orange-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 transition-all shadow-lg"
                 >
                     {loading ? (
                         <Loader2 className="animate-spin mr-2" size={20} />
@@ -81,7 +81,7 @@ export default function Login() {
                 </button>
 
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-4">
-                    {language === 'es' ? 'v1.1.0 • Modo oscuro • ES/EN' : 'v1.1.0 • Dark mode • ES/EN'}
+                    {language === 'es' ? 'v1.2.0 • Modo oscuro • ES/EN' : 'v1.2.0 • Dark mode • ES/EN'}
                 </p>
             </div>
         </div>

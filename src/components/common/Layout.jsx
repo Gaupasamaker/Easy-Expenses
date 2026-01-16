@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { PlusCircle, List, Settings, LogOut, Wallet } from 'lucide-react';
+import { PlusCircle, List, Settings, LogOut, Plane } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 
@@ -29,10 +29,10 @@ export default function Layout() {
             <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-slate-200 dark:border-gray-700">
                 <div className="p-6">
                     <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                        <div className="bg-indigo-600 p-2 rounded-xl shadow-lg shadow-indigo-200 dark:shadow-indigo-900">
-                            <Wallet className="text-white" size={24} />
+                        <div className="bg-gradient-to-br from-orange-500 to-pink-500 p-2 rounded-xl shadow-lg shadow-orange-200 dark:shadow-orange-900/50">
+                            <Plane className="text-white" size={24} />
                         </div>
-                        <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600">
+                        <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-pink-500">
                             EasyExpenses
                         </h1>
                     </Link>
@@ -46,11 +46,11 @@ export default function Layout() {
                                 key={item.path}
                                 to={item.path}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium ${isActive
-                                    ? 'bg-indigo-50 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 shadow-sm'
+                                    ? 'bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 shadow-sm'
                                     : 'text-slate-500 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-gray-700 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                             >
-                                <item.icon size={20} className={isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-gray-500'} />
+                                <item.icon size={20} className={isActive ? 'text-orange-500 dark:text-orange-400' : 'text-slate-400 dark:text-gray-500'} />
                                 {item.name}
                             </Link>
                         )
@@ -81,10 +81,10 @@ export default function Layout() {
                 <header className="md:hidden flex-none bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-slate-200 dark:border-gray-700 px-4 py-3 sticky top-0 z-30">
                     <div className="flex items-center justify-between mx-auto w-full">
                         <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                            <div className="bg-indigo-600 p-1.5 rounded-lg">
-                                <Wallet className="text-white" size={20} />
+                            <div className="bg-gradient-to-br from-orange-500 to-pink-500 p-1.5 rounded-lg">
+                                <Plane className="text-white" size={20} />
                             </div>
-                            <h1 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600">
+                            <h1 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-pink-500">
                                 EasyExpenses
                             </h1>
                         </Link>
@@ -110,7 +110,7 @@ export default function Layout() {
                                 <Link
                                     key={item.path}
                                     to={item.path}
-                                    className={`flex flex-col items-center justify-center w-16 py-1 transition-all duration-300 ${isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-gray-500 hover:text-slate-600 dark:hover:text-gray-300'
+                                    className={`flex flex-col items-center justify-center w-16 py-1 transition-all duration-300 ${isActive ? 'text-orange-500 dark:text-orange-400' : 'text-slate-400 dark:text-gray-500 hover:text-slate-600 dark:hover:text-gray-300'
                                         }`}
                                 >
                                     <item.icon
@@ -130,7 +130,7 @@ export default function Layout() {
                             to="/create-trip"
                             className="absolute left-1/2 -translate-x-1/2 -top-6 group"
                         >
-                            <div className="bg-gradient-to-br from-indigo-500 to-violet-600 rounded-full p-3.5 shadow-lg shadow-indigo-200 dark:shadow-indigo-900 text-white transition-transform duration-300 group-hover:scale-110 group-active:scale-95 ring-4 ring-slate-50 dark:ring-gray-900">
+                            <div className="bg-gradient-to-br from-orange-500 to-pink-500 rounded-full p-3.5 shadow-lg shadow-orange-200 dark:shadow-orange-900/50 text-white transition-transform duration-300 group-hover:scale-110 group-active:scale-95 ring-4 ring-slate-50 dark:ring-gray-900">
                                 <PlusCircle size={32} />
                             </div>
                         </Link>
