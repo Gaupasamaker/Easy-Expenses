@@ -6,7 +6,7 @@ import { ExpenseService } from '../services/ExpenseService';
 import { ExportService } from '../services/ExportService';
 import ExpenseCharts from '../components/analytics/ExpenseCharts';
 import ConfirmModal from '../components/common/ConfirmModal';
-import { ArrowLeft, Plus, Receipt, Calendar, Utensils, Car, Hotel, ShoppingBag, PieChart as PieChartIcon, List, Download, Loader2, Trash2, Edit3, MoreVertical, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Plus, Receipt, Calendar, Utensils, Car, Hotel, ShoppingBag, PieChart as PieChartIcon, List, Download, FileText, Loader2, Trash2, Edit3, MoreVertical, AlertTriangle } from 'lucide-react';
 import { format } from 'date-fns';
 import { useCurrency } from '../contexts/CurrencyContext';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -30,6 +30,7 @@ export default function TripDetails() {
     const [loading, setLoading] = useState(true);
     const [showCharts, setShowCharts] = useState(false);
     const [exporting, setExporting] = useState(false);
+    const [exportingPdf, setExportingPdf] = useState(false);
     const [activeMenu, setActiveMenu] = useState(null);
     const [deleteModal, setDeleteModal] = useState({ isOpen: false, expenseId: null, expenseName: '' });
 
@@ -67,11 +68,22 @@ export default function TripDetails() {
     const handleExport = async () => {
         try {
             setExporting(true);
-            await ExportService.exportTripData(trip, expenses);
+            await ExportService.exportTripData(trip, expenses, currency);
         } catch (error) {
             console.error("Export failed:", error);
         } finally {
             setExporting(false);
+        }
+    };
+
+    const handleExportPdf = async () => {
+        try {
+            setExportingPdf(true);
+            await ExportService.exportToPDF(trip, expenses, currency, t);
+        } catch (error) {
+            console.error("PDF export failed:", error);
+        } finally {
+            setExportingPdf(false);
         }
     };
 
@@ -101,14 +113,24 @@ export default function TripDetails() {
                         <ArrowLeft size={24} className="text-gray-600 dark:text-gray-400" />
                     </button>
                     <h1 className="text-lg font-bold text-gray-800 dark:text-white truncate px-2 overflow-hidden flex-1">{trip?.name}</h1>
-                    <button
-                        onClick={handleExport}
-                        disabled={exporting}
-                        className="p-2 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/50 rounded-full transition-colors"
-                        title={t('export')}
-                    >
-                        {exporting ? <Loader2 size={24} className="animate-spin" /> : <Download size={24} />}
-                    </button>
+                    <div className="flex gap-1">
+                        <button
+                            onClick={handleExportPdf}
+                            disabled={exportingPdf}
+                            className="p-2 text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/50 rounded-full transition-colors"
+                            title={t('download_pdf')}
+                        >
+                            {exportingPdf ? <Loader2 size={22} className="animate-spin" /> : <FileText size={22} />}
+                        </button>
+                        <button
+                            onClick={handleExport}
+                            disabled={exporting}
+                            className="p-2 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/50 rounded-full transition-colors"
+                            title={t('export')}
+                        >
+                            {exporting ? <Loader2 size={22} className="animate-spin" /> : <Download size={22} />}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Summary Card */}

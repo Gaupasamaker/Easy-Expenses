@@ -125,7 +125,21 @@ export const translations = {
         export: "Export",
         export_excel: "Export to Excel",
         export_zip: "Download ZIP",
+        download_pdf: "Download PDF",
         exporting: "Exporting...",
+
+        // Offline
+        offline_mode: "Offline",
+        pending: "pending",
+        pending_sync: "to sync",
+        syncing: "Syncing...",
+        synced: "Synced!",
+        remaining: "Remaining",
+        by_category: "By Category",
+        date: "Date",
+        merchant: "Merchant",
+        category: "Category",
+        amount: "Amount",
 
         // Errors
         error: "Error",
@@ -262,7 +276,21 @@ export const translations = {
         export: "Exportar",
         export_excel: "Exportar a Excel",
         export_zip: "Descargar ZIP",
+        download_pdf: "Descargar PDF",
         exporting: "Exportando...",
+
+        // Offline
+        offline_mode: "Sin conexión",
+        pending: "pendiente",
+        pending_sync: "por sincronizar",
+        syncing: "Sincronizando...",
+        synced: "¡Sincronizado!",
+        remaining: "Restante",
+        by_category: "Por Categoría",
+        date: "Fecha",
+        merchant: "Comercio",
+        category: "Categoría",
+        amount: "Importe",
 
         // Errors
         error: "Error",

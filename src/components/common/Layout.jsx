@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { PlusCircle, List, Settings, LogOut, Plane } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
+import OfflineIndicator from './OfflineIndicator';
 
 export default function Layout() {
     const { logout } = useAuth();
@@ -137,7 +138,11 @@ export default function Layout() {
                     </div>
                 </nav>
 
+                {/* Offline Indicator */}
+                <OfflineIndicator />
+
             </div>
         </div>
     );
 }
+
